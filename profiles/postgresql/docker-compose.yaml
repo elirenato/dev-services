@@ -1,12 +1,13 @@
 # Container only for development and testing! purpose
-version: "3.9"
+version: "3.8"
 services:
   postgresql:
+    container_name: postgresql
     build:
       context: ../../docker/postgresql
       dockerfile: Dockerfile
     volumes:
-      - postgresql-data:/var/lib/postgresql/data/
+      - ${POSTGRES_DATA_DIR}:/var/lib/postgresql/data/
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -16,11 +17,10 @@ services:
     ports:
       - ${POSTGRES_PORT}
     networks:
-      - internal-net
-volumes:
-  postgresql-data:
-    name: "postgresql-data"
+      - backend_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      start_period: 15s
 networks:
-  internal-net:
-    name: internal-net
+  backend_net:
     driver: bridge
