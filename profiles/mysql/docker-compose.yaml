@@ -1,0 +1,15 @@
+# Container only for development and testing! purpose
+version: "3.8"
+services:
+  mysql:
+    container_name: mysql
+    image: mysql
+    volumes:
+      - ${MYSQL_DATA_DIR}:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    ports:
+      - ${MYSQL_PORT}
